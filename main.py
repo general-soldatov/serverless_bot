@@ -1,3 +1,4 @@
+import asyncio
 from os import environ
 from aiogram import Bot, Dispatcher
 
@@ -9,5 +10,8 @@ async def handler():
     dp = Dispatcher(bot)
 
     await register_handlers(dp)
+    await dp.start_polling(bot)
 
-    return {'statusCode': 200, 'body': 'ok'}
+
+if __name__ == '__main__':
+    asyncio.run(handler())
