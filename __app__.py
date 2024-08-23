@@ -8,8 +8,14 @@ log = logging.getLogger(__name__)
 # Functions for Yandex.Cloud
 async def register_handlers(dp: Dispatcher):
     """Registration all handlers before processing update."""
-
+    # comands handlers
     dp.register_message_handler(comand.start, commands=['start'])
+    dp.register_message_handler(comand.help, commands=['help'])
+
+    # menu handlers
+
+
+    # echo handlers
     dp.register_message_handler(menu.echo)
 
     log.debug('Handlers are registered.')
