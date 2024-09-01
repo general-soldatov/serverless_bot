@@ -1,7 +1,8 @@
 import logging
 from aiogram import Bot, Dispatcher, types
-import handlers.comands as comand
-import handlers.menu as menu
+from handlers.comands import register_comand
+from handlers.menu import register_text
+from handlers.register_user import register_user
 
 log = logging.getLogger(__name__)
 
@@ -9,13 +10,15 @@ log = logging.getLogger(__name__)
 async def register_handlers(dp: Dispatcher):
     """Registration all handlers before processing update."""
     # comands handlers
-    dp.register_message_handler(comand.start, commands=['start'])
-    dp.register_message_handler(comand.help, commands=['help'])
+    await register_comand(dp)
+    await register_user(dp)
+    # dp.register_message_handler(comand.start, commands=['start'])
+    # dp.register_message_handler(comand.help, commands=['help'])
 
     # menu handlers
 
-
+    await register_text(dp)
     # echo handlers
-    dp.register_message_handler(menu.echo)
+    # dp.register_message_handler(menu.echo)
 
     log.debug('Handlers are registered.')
