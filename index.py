@@ -3,7 +3,8 @@ import json
 import logging
 import os
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
+from aiogram.types import update
 from __app__ import register_handlers
 
 
@@ -12,18 +13,14 @@ log = logging.getLogger(__name__)
 log.setLevel('INFO')
 
 
-async def process_event(event, dp: Dispatcher):
+async def process_event(event, dp: Dispatcher, bot: Bot):
     """
     Converting an Yandex.Cloud functions event to an update and
     handling tha update.
     """
-
-    update = json.loads(event['body'])
-    log.debug('Update: ' + str(update))
-
-    Bot.set_current(dp.bot)
-    update = types.Update.to_object(update)
-    await dp.process_update(update)
+    up = json.loads(event['body'])
+    my_update = update.Update(update_id=up['update_id'], message=up['message'])
+    await dp.feed_update(bot=bot, update=my_update)
 
 
 async def handler(event, context):
@@ -32,10 +29,10 @@ async def handler(event, context):
     if event['httpMethod'] == 'POST':
         # Bot and dispatcher initialization
         bot = Bot(os.environ.get('TOKEN'))
-        dp = Dispatcher(bot)
+        dp = Dispatcher()
 
         await register_handlers(dp)
-        await process_event(event, dp)
+        await process_event(event, dp, bot)
 
         return {'statusCode': 200, 'body': 'ok'}
     return {'statusCode': 405}

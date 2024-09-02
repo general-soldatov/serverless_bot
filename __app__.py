@@ -1,5 +1,5 @@
 import logging
-from aiogram import Bot, Dispatcher, types
+from aiogram import Dispatcher
 from handlers import comands, register_user, menu
 
 log = logging.getLogger(__name__)
