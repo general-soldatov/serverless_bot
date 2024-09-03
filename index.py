@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 import os
@@ -6,7 +5,7 @@ import os
 from aiogram import Bot, Dispatcher
 from aiogram.types import update
 from __app__ import register_handlers
-from infrastructure.fsm_ydb import YDBStorage
+from infrastructure.database import YDBStorage
 
 
 # Logger initialization and logging level setting

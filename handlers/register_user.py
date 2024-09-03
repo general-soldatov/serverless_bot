@@ -6,41 +6,51 @@ from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.filters import Command, StateFilter
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-available_food_names = ["суши", "спагетти", "хачапури"]
-available_food_sizes = ["маленькую", "среднюю", "большую"]
+from infrastructure.database import UserSheet, UserUn
+from infrastructure.lexicon.lexicon_ru import COMANDS, USER
+from infrastructure.lexicon.buttons import BUTTONS_RU
 
-class OrderFood(StatesGroup):
-    waiting_for_food_name = State()
-    waiting_for_food_size = State()
+available = ['no', 'yes']
+
+class Register(StatesGroup):
+    name_user = State()
+    confirmation = State()
 
 def router(dp: Dispatcher):
 
-    @dp.message(Command(commands='register'), StateFilter(default_state))
+    @dp.message(Command(commands='register'))
     async def cmd_register(message: Message, state: FSMContext):
-        kp_build = ReplyKeyboardBuilder()
-        buttons: list[KeyboardButton] = [KeyboardButton(text=item) for item in available_food_names]
-        kp_build.row(*buttons)
-        await state.set_state(OrderFood.waiting_for_food_name.state)
-        await message.answer('Can you select food',
-                            reply_markup=kp_build.as_markup(resize_keyboard=True))
+        await state.set_state(Register.name_user.state)
+        await message.answer(COMANDS['register'])
 
 
-    @dp.message(StateFilter(OrderFood.waiting_for_food_name), F.text.isalpha())
-    async def select_food(message: Message, state: FSMContext):
-        await state.update_data(chosen_food=message.text.lower())
-        kp_build = ReplyKeyboardBuilder()
-        buttons: list[KeyboardButton] = [KeyboardButton(text=item) for item in available_food_sizes]
-        kp_build.row(*buttons)
-        await state.set_state(OrderFood.waiting_for_food_size.state)
-        await message.answer('Select food`s size',
-                            reply_markup=kp_build.as_markup(resize_keyboard=True))
+    @dp.message(StateFilter(Register.name_user))
+    async def user_name(message: Message, state: FSMContext):
+        user = UserSheet(user_id=message.from_user.id).user_search(name=message.text.lower())
+        if user:
+            kp_build = ReplyKeyboardBuilder()
+            buttons: list[KeyboardButton] = [KeyboardButton(text=BUTTONS_RU[item]) for item in available]
+            kp_build.row(*buttons)
+            await state.set_data(data=user)
+            await state.set_state(Register.confirmation.state)
+            await message.answer(USER['available'].format(name=user['name'],
+                                                        profile=user['profile'],
+                                                        group=user['group']),
+                                reply_markup=kp_build.as_markup(resize_keyboard=True))
+        else:
+            await message.answer(USER['uncorrect'])
 
-    @dp.message(StateFilter(OrderFood.waiting_for_food_size))
-    async def select_size(message: Message, state: FSMContext):
-        btn = types.KeyboardButton(text='app', web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
-        web_app_buton = types.ReplyKeyboardMarkup(keyboard=[[btn]], resize_keyboard=True)
-        await state.update_data(size_food=message.text.lower())
+    @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['yes'])
+    async def app_user(message: Message, state: FSMContext):
+        # btn = types.KeyboardButton(text='app', web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
+        # web_app_buton = types.ReplyKeyboardMarkup(keyboard=[[btn]], resize_keyboard=True)
+        register = UserUn()
+        register.update_active(user_id=message.from_user.id, active=2)
         user_data = await state.get_data()
-        print(user_data)
-        await message.answer(f'{user_data}', reply_markup=web_app_buton)
+        await message.answer(f'{user_data}')
         await state.clear()
+
+    @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['no'])
+    async def no_user(message: Message, state: FSMContext):
+        await message.answer(text=USER['no'])
+        await state.set_state(Register.name_user.state)

@@ -1,16 +1,22 @@
 import asyncio
+import logging
 from os import environ
 from aiogram import Bot, Dispatcher, F
-from aiogram.fsm.storage.memory import MemoryStorage
-
 
 from __app__ import register_handlers
-from infrastructure.fsm_ydb import YDBStorage
+from infrastructure.database import YDBStorage
 
+logger = logging.getLogger(__name__)
 
 async def handler():
     # Bot and dispatcher initialization
     bot = Bot(environ.get('TOKEN'))
+    # Create table
+    # try:
+    #     YDBStorage()._create_table()
+    # except BaseException as e:
+    #     logger.error(f"FSM Storage error: {e}")
+
     dp = Dispatcher(storage=YDBStorage())
 
     await register_handlers(dp)
