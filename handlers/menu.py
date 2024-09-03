@@ -1,10 +1,10 @@
 import logging
-from aiogram import types, Router
+from aiogram import types, Dispatcher
 
 log = logging.getLogger(__name__)
 
-router = Router()
+def router(dp: Dispatcher):
 
-@router.message()
-async def echo(message: types.Message):
-    await message.answer(message.text)
+    @dp.message()
+    async def echo(message: types.Message):
+        await message.answer(message.text)
