@@ -6,7 +6,7 @@ from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.filters import Command, StateFilter
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from infrastructure.database import UserSheet, UserUn
+from infrastructure.database import UserApi, UserUn
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU
 
@@ -26,11 +26,13 @@ def router(dp: Dispatcher):
 
     @dp.message(StateFilter(Register.name_user))
     async def user_name(message: Message, state: FSMContext):
-        user = UserSheet(user_id=message.from_user.id).user_search(name=message.text.lower())
+        # user = UserSheet(user_id=message.from_user.id).user_search(name=message.text.lower())
+        user = UserApi().contingent(name=message.text)
         if user:
             kp_build = ReplyKeyboardBuilder()
             buttons: list[KeyboardButton] = [KeyboardButton(text=BUTTONS_RU[item]) for item in available]
             kp_build.row(*buttons)
+            user['name'] = message.text.title()
             await state.set_data(data=user)
             await state.set_state(Register.confirmation.state)
             await message.answer(USER['available'].format(name=user['name'],

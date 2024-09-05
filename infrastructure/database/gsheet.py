@@ -40,6 +40,21 @@ class UserSheet:
                 }
         return False
 
+    def contingent(self):
+        contingent = self.table.worksheet('contingent')
+        all_rows = contingent.get_all_values()
+        data = {}
+        for i, row in enumerate(all_rows[1:], 1):
+            data[row[0]] = {
+                    'google_id': str(i),
+                    'profile': row[1],
+                    'group': f'{row[2]}-{row[3]}',
+                    'var': row[4],
+                    'varD': row[5]
+                }
+
+        return data
+
     def user_info(self, google_id):
         header = self.rate.row_values(1)
         info = self.rate.row_values(google_id)
@@ -49,6 +64,30 @@ class UserSheet:
         word = self.task_head[task]
         self.rate.update_acell(f'{word}{google_id}', ball)
         return 'ok'
+
+    def shedule(self):
+        shedule = self.table.worksheet('shedule')
+        lst = shedule.get_all_values()
+
+        days = lst[0][1:]
+        schedule = lst[1:]
+        data = {
+            '0': {},
+            '1': {}
+        }
+
+        for day in days:
+            data['0'][day] = {}
+            data['1'][day] = {}
+
+        for i, tms in enumerate(schedule, 1):
+            for j, disc in enumerate(tms[1:]):
+                if disc == '':
+                    continue
+                data[str(i%2)][days[j]].update({tms[0]: disc.replace('\n', ' ').replace('  ', ' ')})
+
+        return data
+
 
     def create_contingent(self, lst_name):
         lst = self.table.worksheet('contingent')
