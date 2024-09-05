@@ -5,10 +5,11 @@ class UserApi():
     def __init__(self, path='/'):
         pass
 
-    def schedule(self, week: int, day: str, path='schedule.json'):
-        with open(path, 'r', encoding='utf-8') as file_json:
-            data = json.load(file_json)
-            return data[str(week)][day.upper()]
+    def schedule(self, week: int, day: str):
+        url = 'https://storage.yandexcloud.net/termex-bot/json/schedule.json'
+        response = requests.get(url)
+        data: dict = response.json()
+        return data[str(week)][day.upper()]
 
     def contingent(self, name: str):
         url = 'https://storage.yandexcloud.net/termex-bot/json/contingent.json'

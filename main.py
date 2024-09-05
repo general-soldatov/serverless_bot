@@ -12,10 +12,6 @@ async def handler():
     # Bot and dispatcher initialization
     bot = Bot(environ.get('TOKEN'))
     # Create table
-    # try:
-    #     YDBStorage()._create_table()
-    # except BaseException as e:
-    #     logger.error(f"FSM Storage error: {e}")
 
     dp = Dispatcher(storage=YDBStorage())
 

@@ -1,11 +1,11 @@
 from aiogram import Dispatcher, types, F
 from aiogram.types import Message, KeyboardButton
-from aiogram.types.web_app_info import WebAppInfo
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.filters import Command, StateFilter
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
+from infrastructure.buttons import UserButton
 from infrastructure.database import UserApi, UserUn
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU
@@ -26,7 +26,6 @@ def router(dp: Dispatcher):
 
     @dp.message(StateFilter(Register.name_user))
     async def user_name(message: Message, state: FSMContext):
-        # user = UserSheet(user_id=message.from_user.id).user_search(name=message.text.lower())
         user = UserApi().contingent(name=message.text)
         if user:
             kp_build = ReplyKeyboardBuilder()
@@ -44,12 +43,11 @@ def router(dp: Dispatcher):
 
     @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['yes'])
     async def app_user(message: Message, state: FSMContext):
-        # btn = types.KeyboardButton(text='app', web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
-        # web_app_buton = types.ReplyKeyboardMarkup(keyboard=[[btn]], resize_keyboard=True)
         register = UserUn()
         register.update_active(user_id=message.from_user.id, active=2)
+        button_markup = UserButton().auth_user()
         user_data = await state.get_data()
-        await message.answer(f'{user_data}')
+        await message.answer(f'{user_data}', reply_markup=button_markup)
         await state.clear()
 
     @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['no'])
