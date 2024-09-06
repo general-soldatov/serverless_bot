@@ -10,7 +10,6 @@ from infrastructure.database import UserApi, UserUn
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU
 
-available = ['no', 'yes']
 
 class Register(StatesGroup):
     name_user = State()
@@ -28,16 +27,14 @@ def router(dp: Dispatcher):
     async def user_name(message: Message, state: FSMContext):
         user = UserApi().contingent(name=message.text)
         if user:
-            kp_build = ReplyKeyboardBuilder()
-            buttons: list[KeyboardButton] = [KeyboardButton(text=BUTTONS_RU[item]) for item in available]
-            kp_build.row(*buttons)
+            kp_build = UserButton().user_name()
             user['name'] = message.text.title()
             await state.set_data(data=user)
             await state.set_state(Register.confirmation.state)
             await message.answer(USER['available'].format(name=user['name'],
                                                         profile=user['profile'],
                                                         group=user['group']),
-                                reply_markup=kp_build.as_markup(resize_keyboard=True))
+                                reply_markup=kp_build)
         else:
             await message.answer(USER['uncorrect'])
 

@@ -26,7 +26,7 @@ def router(dp: Dispatcher):
 
     @dp.message(Command(commands=['menu']))
     async def help(message: types.Message):
-        buttons = UserButton().auth_user()
+        buttons = UserButton()(user_id=message.from_user.id)
         await message.answer(text=COMANDS['menu'], reply_markup=buttons)
 
     @dp.message(Command(commands=['cancel']), StateFilter(default_state))
