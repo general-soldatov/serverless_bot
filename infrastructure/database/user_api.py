@@ -23,13 +23,13 @@ class UserApi():
 class Schedule:
     def __init__(self, connect=UserApi()) -> None:
         self.connect = connect
-        self.weekdays = ["ПОНЕДЕЛЬНИК", "ВТОРНИК", "СРЕДА", "ЧЕТВЕРГ", "ПЯТНИЦА", "СУББОТА", "ВОСКРЕСЕНЬЕ"]
+        self.weekdays = ['', "ПОНЕДЕЛЬНИК", "ВТОРНИК", "СРЕДА", "ЧЕТВЕРГ", "ПЯТНИЦА", "СУББОТА", "ВОСКРЕСЕНЬЕ"]
 
     def __call__(self, day: str) -> str:
         days = ['today', 'tomorrow', 'after_tom']
         date_to = days.index(day)
         calendar = self.go_day(date_to)
-        shedule: dict = self.connect.schedule(week=calendar.week,
+        shedule: dict = self.connect.schedule(week=(calendar.week % 2),
                               day=self.weekdays[calendar.weekday])
         return self.weekdays[calendar.weekday], shedule
 

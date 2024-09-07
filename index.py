@@ -18,9 +18,10 @@ async def process_event(event, dp: Dispatcher, bot: Bot):
     Converting an Yandex.Cloud functions event to an update and
     handling tha update.
     """
-    up = json.loads(event['body'])
-    my_update = update.Update(update_id=up['update_id'], message=up['message'])
-    await dp.feed_update(bot=bot, update=my_update)
+    up: dict = json.loads(event['body'])
+
+    my_update = update.Update.model_validate(up, context={"bot": bot})
+    await dp.feed_update(bot, my_update)
 
 
 async def handler(event, context):

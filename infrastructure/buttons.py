@@ -76,10 +76,10 @@ class UserInline:
 
     def contact(self) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        contacts = {
+        contacts: dict = {
             'vk': 'https://vk.com/general_soldatov',
             'telegram': 'https://t.me/general_soldatov'
-        },
+        }
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in contacts.items()]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()

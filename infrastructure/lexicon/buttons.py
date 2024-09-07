@@ -11,5 +11,9 @@ BUTTONS_RU: dict = {
     'dynamic': "Динамика",
     'shortcourse': 'Курс Теормех',
     'vk': 'ВК',
-    'telegram': 'Telegram'
+    'telegram': 'Telegram',
+    'today': 'Сегодня',
+    'tomorrow': 'Завтра',
+    'after_tom': 'Послезавтра'
+
 }

@@ -34,6 +34,13 @@ def router(dp: Dispatcher):
         text += '\n'.join([f'{key}: {value}' for key, value in shedules.items()])
         await message.answer(text, reply_markup=builder)
 
+
+    @dp.callback_query()
+    async def process(callback: CallbackQuery):
+        log.error(f'{dp.update.event_name} {dp.update.__dict__}')
+        await callback.message.answer(text=callback.data)
+        await callback.answer()
+
     @dp.callback_query(SheduleCall.filter())
     async def shedule_call(callback: CallbackQuery,
                            callback_data: SheduleCall):
