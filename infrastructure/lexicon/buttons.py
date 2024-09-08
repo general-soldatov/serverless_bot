@@ -14,6 +14,7 @@ BUTTONS_RU: dict = {
     'telegram': 'Telegram',
     'today': 'Сегодня',
     'tomorrow': 'Завтра',
-    'after_tom': 'Послезавтра'
+    'after_tom': 'Послезавтра',
+    'to_2_day': 'Через 2 дня'
 
 }

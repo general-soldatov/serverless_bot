@@ -86,7 +86,7 @@ class UserInline:
 
     def shedule(self, day:str = 'today') -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        days: dict = ['today', 'tomorrow', 'after_tom']
+        days: dict = ['today', 'tomorrow', 'after_tom', 'to_2_day']
         days.remove(day)
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[item],
                                               callback_data=SheduleCall(day=item).pack()) for item in days]

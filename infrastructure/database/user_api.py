@@ -26,10 +26,10 @@ class Schedule:
         self.weekdays = ['', "ПОНЕДЕЛЬНИК", "ВТОРНИК", "СРЕДА", "ЧЕТВЕРГ", "ПЯТНИЦА", "СУББОТА", "ВОСКРЕСЕНЬЕ"]
 
     def __call__(self, day: str) -> str:
-        days = ['today', 'tomorrow', 'after_tom']
+        days = ['today', 'tomorrow', 'after_tom', 'to_2_day']
         date_to = days.index(day)
         calendar = self.go_day(date_to)
-        shedule: dict = self.connect.schedule(week=(calendar.week % 2),
+        shedule: dict = self.connect.schedule(week=((calendar.week+1) % 2),
                               day=self.weekdays[calendar.weekday])
         return self.weekdays[calendar.weekday], shedule
 

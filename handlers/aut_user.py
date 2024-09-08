@@ -1,7 +1,9 @@
 import logging
 from aiogram import Dispatcher, F
 from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command
 
+from infrastructure.database import UserVar
 from infrastructure.database.user_api import Schedule
 from infrastructure.buttons import UserInline, SheduleCall
 from infrastructure.lexicon.buttons import BUTTONS_RU
@@ -26,6 +28,15 @@ def router(dp: Dispatcher):
         builder = UserInline().contact()
         await message.answer(USER['contact'], reply_markup=builder)
 
+    @dp.message(Command(commands='profile'))
+    async def profile(message: Message):
+        user_data = UserVar().get_user(user_id=message.from_user.id)
+        await message.answer(USER['profile'].format(name=user_data['name'],
+                           profile=user_data['profile'],
+                           group=user_data['group'],
+                           var=user_data['var']['var_all'],
+                           var_d1=user_data['var']['var_d1']))
+
     @dp.message(F.text == BUTTONS_RU['shedule'])
     async def shedule(message: Message):
         builder = UserInline(width=2).shedule()
@@ -33,13 +44,6 @@ def router(dp: Dispatcher):
         text = weekday + '\n'
         text += '\n'.join([f'{key}: {value}' for key, value in shedules.items()])
         await message.answer(text, reply_markup=builder)
-
-
-    @dp.callback_query()
-    async def process(callback: CallbackQuery):
-        log.error(f'{dp.update.event_name} {dp.update.__dict__}')
-        await callback.message.answer(text=callback.data)
-        await callback.answer()
 
     @dp.callback_query(SheduleCall.filter())
     async def shedule_call(callback: CallbackQuery,

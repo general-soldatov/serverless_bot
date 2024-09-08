@@ -6,7 +6,7 @@ from aiogram.filters import Command, StateFilter
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from infrastructure.buttons import UserButton
-from infrastructure.database import UserApi, UserUn
+from infrastructure.database import UserApi, UserUn, UserVar
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU
 
@@ -44,7 +44,17 @@ def router(dp: Dispatcher):
         register.update_active(user_id=message.from_user.id, active=2)
         button_markup = UserButton().auth_user()
         user_data = await state.get_data()
-        await message.answer(f'{user_data}', reply_markup=button_markup)
+        UserVar().put_item(user_id=message.from_user.id,
+                           name=user_data['name'],
+                           profile=user_data['profile'],
+                           group=user_data['group'],
+                           var=user_data['var'],
+                           var_d1=user_data['varD'])
+        await message.answer(USER['yes'].format(name=user_data['name'],
+                           profile=user_data['profile'],
+                           group=user_data['group'],
+                           var=user_data['var'],
+                           var_d1=user_data['varD']), reply_markup=button_markup)
         await state.clear()
 
     @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['no'])
