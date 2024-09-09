@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime, timedelta
+from os import getenv
 
 class UserApi():
     def __init__(self, path='/'):
@@ -16,9 +17,14 @@ class UserApi():
         response = requests.get(url)
         data: dict = response.json()
         search_name = name.title()
-        if search_name in data.keys():
-            return data[search_name]
-        return False
+        return data.get(search_name, False)
+
+    def get_task(self, category='mechanic', level=10, num=0):
+        token = 111
+        api_url = getenv('API_URL')
+        url = f'{api_url}/task_book/token={token}category={category}_level={level}num={num}'
+        response = requests.get(url)
+        return response.json()
 
 class Schedule:
     def __init__(self, connect=UserApi()) -> None:
