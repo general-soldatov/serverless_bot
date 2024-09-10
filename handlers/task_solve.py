@@ -9,4 +9,4 @@ def router(dp: Dispatcher):
     @dp.message(Command(commands=['task']))
     async def task(message: types.Message):
         text = UserApi().get_task()
-        await message.answer(text=text)
+        await message.answer(text=str(text))

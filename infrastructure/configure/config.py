@@ -12,6 +12,7 @@ class TgBot:
     shedule: str
     contingent: str
 
+@dataclass
 class DatabaseConfig:
     endpoint: str
     region_name: str
