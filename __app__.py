@@ -1,7 +1,7 @@
 import logging
 from aiogram import Dispatcher
 from dotenv import load_dotenv
-from handlers import comands, register_user, aut_user
+from handlers import comands, register_user, aut_user, task_solve
 
 log = logging.getLogger(__name__)
 
@@ -12,6 +12,7 @@ async def register_handlers(dp: Dispatcher):
     comands.router(dp)
     register_user.router(dp)
     aut_user.router(dp)
+    task_solve.router(dp)
     # menu.router(dp)
 
     log.debug('Handlers are registered.')

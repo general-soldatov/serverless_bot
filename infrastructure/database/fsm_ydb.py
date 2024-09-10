@@ -11,6 +11,8 @@ from aiogram.fsm.storage.base import BaseStorage, StorageKey
 from aiogram.fsm.state import State
 from typing import Any, Dict, Optional
 
+from infrastructure.configure.config import dynamodb_config
+
 logger = logging.getLogger(__name__)
 
 class YDBStorage(BaseStorage):
@@ -28,13 +30,7 @@ class YDBStorage(BaseStorage):
 
         if not self.dynamodb:
             load_dotenv()
-            self.dynamodb = boto3.resource(
-                'dynamodb',
-                endpoint_url=getenv('ENDPOINT'),
-                region_name='ru-central1',
-                aws_access_key_id=getenv('AWS_ACCESS_KEY_ID'),
-                aws_secret_access_key=getenv('AWS_SECRET_ACCESS_KEY')
-                )
+            self.dynamodb = dynamodb_config
 
 
     def _create_table(self) -> None:

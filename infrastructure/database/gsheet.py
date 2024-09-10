@@ -1,17 +1,16 @@
 import gspread
-from os import getenv
 from datetime import datetime
-from dotenv import load_dotenv
 from gspread import exceptions
 from time import sleep
 from progress.bar import IncrementalBar
+
+from infrastructure.configure.config import database_config
 
 
 class UserSheet:
     def __init__(self, user_id, table="Термех 2/2024"):
         self.user_id = user_id
-        load_dotenv()
-        self.gs = gspread.service_account(filename=getenv('GOOGLE_SERVICE_ACCOUNT'))
+        self.gs = gspread.service_account(filename=database_config.google_api)
         self.table = self.gs.open(table)
         self.rate = self.table.worksheet('rate')
         self.task_head = {

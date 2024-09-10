@@ -3,6 +3,8 @@ from boto3.dynamodb.conditions import Key
 from os import getenv
 from dotenv import load_dotenv
 
+from infrastructure.configure.config import dynamodb_config
+
 class UserUn:
     """Класс для управления записями в базе данных YDB, название класса не принципиально.
     """
@@ -14,13 +16,7 @@ class UserUn:
         self.table = 'User_Unauthorized'
         if not self.dynamodb:
             load_dotenv()
-            self.dynamodb = boto3.resource(
-                'dynamodb',
-                endpoint_url=getenv('ENDPOINT'),
-                region_name='ru-central1',
-                aws_access_key_id=getenv('AWS_ACCESS_KEY_ID'),
-                aws_secret_access_key=getenv('AWS_SECRET_ACCESS_KEY')
-                )
+            self.dynamodb = dynamodb_config
 
     def create_table(self):
         """Метод создания таблицы, инициализируются ключи и столбцы таблицы

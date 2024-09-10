@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 
 from infrastructure.buttons import UserButton
-from infrastructure.database import UserUn, UserApi
+from infrastructure.database import UserUn
 from infrastructure.lexicon.lexicon_ru import COMANDS
 
 log = logging.getLogger(__name__)
@@ -36,10 +36,4 @@ def router(dp: Dispatcher):
     @dp.message(Command(commands=['cancel']), ~StateFilter(default_state))
     async def help(message: types.Message, state: FSMContext):
         await message.answer(text=COMANDS['cancel'])
-        await state.clear()
-
-    @dp.message(Command(commands=['task']))
-    async def task(message: types.Message, state: FSMContext):
-        text = UserApi().get_task()
-        await message.answer(text=str(text))
         await state.clear()
