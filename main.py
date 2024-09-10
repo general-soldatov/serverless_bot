@@ -15,9 +15,8 @@ async def handler():
 
     dp = Dispatcher(storage=YDBStorage())
 
-    await register_handlers(dp)
+    await register_handlers(dp, bot)
     await dp.start_polling(bot)
-
 
 
 

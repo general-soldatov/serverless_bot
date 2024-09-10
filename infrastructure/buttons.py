@@ -30,7 +30,7 @@ class UserButton:
         return kp_build.as_markup(resize_keyboard=self.resize_keyboard)
 
     def auth_user(self) -> ReplyKeyboardMarkup:
-        box_button = ['profile', 'metodic', 'textbook', 'shedule', 'contact']
+        box_button = ['profile', 'metodic', 'textbook', 'graph_task', 'shedule', 'contact']
         kp_build = ReplyKeyboardBuilder()
         btn = types.KeyboardButton(text=BUTTONS_RU[box_button[0]], web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
         buttons: list[KeyboardButton] = [btn]
@@ -47,6 +47,14 @@ class UserButton:
 
 class SheduleCall(CallbackData, prefix='shedule'):
     day: str
+
+class GraphTaskCall(CallbackData, prefix='graph_task'):
+    task: str
+
+class GraphTaskScoreCall(CallbackData, prefix='prepod_task'):
+    task: str
+    score: str
+    user_id: str
 
 
 class UserInline:
@@ -90,5 +98,24 @@ class UserInline:
         days.remove(day)
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[item],
                                               callback_data=SheduleCall(day=item).pack()) for item in days]
+        builder.row(*buttons, width=self.width)
+        return builder.as_markup()
+
+    def graph_task(self, num: list | None = None) -> InlineKeyboardMarkup:
+        builder = InlineKeyboardBuilder()
+        task = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'K1', 'K2', 'K3', 'K4', 'K5', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6']
+        if not num:
+            num = list(range(0, len(task)))
+        buttons: list = [InlineKeyboardButton(text=task[item],
+                                              callback_data=GraphTaskCall(task=task[item]).pack()) for item in num]
+        builder.row(*buttons, width=self.width)
+        return builder.as_markup()
+
+    def prepod_task(self, task, user_id) -> InlineKeyboardMarkup:
+        builder = InlineKeyboardBuilder()
+        buttons: list = [InlineKeyboardButton(text=str(item),
+                                              callback_data=GraphTaskScoreCall(task=task,
+                                                                               score=str(item),
+                                                                               user_id=user_id).pack()) for item in range(self.width)]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()

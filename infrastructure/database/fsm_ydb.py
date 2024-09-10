@@ -121,7 +121,8 @@ class YDBStorage(BaseStorage):
             return response['Items'][0]['state'] if response['Items'] else None
 
         except BaseException as e:
-            logger.error(f"FSM Storage error get_state: {e}")
+            if e != 'state':
+                logger.error(f"FSM Storage error get_state: {e}")
 
     async def set_data(self, key: StorageKey, data: Dict[str, Any]) -> None:
         """

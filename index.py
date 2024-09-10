@@ -32,7 +32,7 @@ async def handler(event, context):
         bot = Bot(os.environ.get('TOKEN'))
         dp = Dispatcher(storage=YDBStorage())
 
-        await register_handlers(dp)
+        await register_handlers(dp, bot)
         await process_event(event, dp, bot)
 
         return {'statusCode': 200, 'body': 'ok'}
