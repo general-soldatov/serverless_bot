@@ -5,7 +5,7 @@ from aiogram.types.web_app_info import WebAppInfo
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 from infrastructure.lexicon.buttons import BUTTONS_RU
-from infrastructure.database import UserUn
+from infrastructure.database import UserUn, UserVar
 from infrastructure.configure.config import ButtonConfig, StudyConfig
 
 class UserButton:
@@ -51,11 +51,13 @@ class SheduleCall(CallbackData, prefix='shedule'):
 
 class GraphTaskCall(CallbackData, prefix='graph_task'):
     task: str
+    name: str
 
-class GraphTaskScoreCall(CallbackData, prefix='prepod_task'):
+class GraphTaskScoreCall(CallbackData, prefix='p_t'):
     task: str
     score: str
     user_id: str
+    name: str
 
 
 class UserInline:
@@ -95,21 +97,25 @@ class UserInline:
         builder.row(*buttons, width=self.width)
         return builder.as_markup()
 
-    def graph_task(self, num: list | None = None) -> InlineKeyboardMarkup:
+    def graph_task(self, user_id) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        task = self.study.tasks
-        if not num:
-            num = list(range(0, len(task)))
-        buttons: list = [InlineKeyboardButton(text=task[item],
-                                              callback_data=GraphTaskCall(task=task[item]).pack()) for item in num]
+        task = list(self.study.tasks)
+        data: dict = UserVar().get_user(user_id=int(user_id))
+        user: str = data['name'].split(sep=' ')
+        name = ' '.join([user[0], user[1][0], user[2][0]])
+        for item in data['tasks'].keys():
+            task.remove(item)
+        buttons: list = [InlineKeyboardButton(text=item,
+                                              callback_data=GraphTaskCall(task=item,
+                                                                          name=name).pack()) for item in task]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()
 
-    def prepod_task(self, task, user_id) -> InlineKeyboardMarkup:
+    def prepod_task(self, task, user_id, name) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
         buttons: list = [InlineKeyboardButton(text=str(item),
                                               callback_data=GraphTaskScoreCall(task=task,
                                                                                score=str(item),
-                                                                               user_id=user_id).pack()) for item in range(self.width)]
+                                                                               user_id=user_id, name=name).pack()) for item in range(self.width)]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()

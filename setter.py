@@ -1,5 +1,5 @@
 import json
-from infrastructure.database import UserSheet
+from infrastructure.database import UserSheet, UserVar
 from infrastructure.database.user_api import UserApi
 import requests
 from infrastructure.configure.config import ButtonConfig
@@ -24,4 +24,9 @@ task_head = {
             'D1': 'P', 'D2': 'Q', 'D3': 'R', 'D4': 'S', 'D5': 'T', 'D6': 'U'
             }
 
-print(ButtonConfig().__dict__)
+# lst_task: list = list(task_head.keys())
+# data: dict = UserVar().get_user(user_id=980314213)
+# for item in data['tasks'].keys():
+#     lst_task.remove(item)
+# print(data['name'], lst_task)
+print(UserVar().get_user(user_id=980314213))

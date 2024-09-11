@@ -1,4 +1,4 @@
-from aiogram import Dispatcher, types, F
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import Message, KeyboardButton
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup, default_state
@@ -9,13 +9,14 @@ from infrastructure.buttons import UserButton
 from infrastructure.database import UserApi, UserUn, UserVar
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.config import bot_config
 
 
 class Register(StatesGroup):
     name_user = State()
     confirmation = State()
 
-def router(dp: Dispatcher):
+def router(dp: Dispatcher, bot: Bot):
 
     @dp.message(Command(commands='register'))
     async def cmd_register(message: Message, state: FSMContext):
@@ -55,6 +56,11 @@ def router(dp: Dispatcher):
                            group=user_data['group'],
                            var=user_data['var'],
                            var_d1=user_data['varD']), reply_markup=button_markup)
+        await bot.send_message(chat_id=bot_config.admin_ids,
+                               text=USER['register_admin'].format(name=user_data['name'],
+                                                    profile=user_data['profile'],
+                                                    group=user_data['group'],
+                                                    var=user_data['var']))
         await state.clear()
 
     @dp.message(StateFilter(Register.confirmation), F.text == BUTTONS_RU['no'])

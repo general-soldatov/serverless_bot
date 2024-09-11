@@ -47,7 +47,7 @@ class UserVar:
     def put_item(self, user_id, name, profile, group, var, var_d1):
         table = self.dynamodb.Table(self.table)
         all_var = {'var_all': var, 'var_d1': var_d1}
-        tasks = {'S1': 0}
+        tasks = {'S0': 0}
         bonus = {
             'static': 0,
             'kinematic': 0,

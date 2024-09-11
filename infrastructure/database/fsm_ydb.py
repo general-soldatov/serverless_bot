@@ -84,8 +84,6 @@ class YDBStorage(BaseStorage):
         :param state: new state
         """
         s_key = self._key(key)
-        # s_state = state.state if isinstance(state, State) else state
-        # s_state = s_state if s_state else ""
         table = self.dynamodb.Table(self.table_name)
 
         try:
@@ -119,10 +117,10 @@ class YDBStorage(BaseStorage):
             )
 
             return response['Items'][0]['state'] if response['Items'] else None
-
+        except KeyError:
+            return
         except BaseException as e:
-            if e != 'state':
-                logger.error(f"FSM Storage error get_state: {e}")
+            logger.error(f"FSM Storage error get_state: {e}")
 
     async def set_data(self, key: StorageKey, data: Dict[str, Any]) -> None:
         """

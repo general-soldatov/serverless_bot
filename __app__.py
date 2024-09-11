@@ -10,7 +10,7 @@ async def register_handlers(dp: Dispatcher, bot: Bot):
     """Registration all handlers before processing update."""
     # comands handlers
     comands.router(dp)
-    register_user.router(dp)
+    register_user.router(dp, bot)
     aut_user.router(dp)
     graph_task.router(dp, bot)
     task_solve.router(dp)
