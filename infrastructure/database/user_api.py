@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta
 from os import getenv
 
-from infrastructure.configure.config import bot_config
+from infrastructure.configure.config import bot_config, StudyConfig
 
 class UserApi():
     def __init__(self, path='/'):
@@ -28,11 +28,12 @@ class UserApi():
 
 class Schedule:
     def __init__(self, connect=UserApi()) -> None:
+        self.study = StudyConfig()
         self.connect = connect
-        self.weekdays = ['', "ПОНЕДЕЛЬНИК", "ВТОРНИК", "СРЕДА", "ЧЕТВЕРГ", "ПЯТНИЦА", "СУББОТА", "ВОСКРЕСЕНЬЕ"]
+        self.weekdays = self.study.weekday
 
     def __call__(self, day: str) -> str:
-        days = ['today', 'tomorrow', 'after_tom', 'to_2_day']
+        days = self.study.select_day
         date_to = days.index(day)
         calendar = self.go_day(date_to)
         shedule: dict = self.connect.schedule(week=((calendar.week+1) % 2),

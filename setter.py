@@ -2,7 +2,7 @@ import json
 from infrastructure.database import UserSheet
 from infrastructure.database.user_api import UserApi
 import requests
-from infrastructure.configure.config import bot_config
+from infrastructure.configure.config import ButtonConfig
 
 def schedule_json():
     data = UserSheet(user_id='333').shedule()
@@ -24,4 +24,4 @@ task_head = {
             'D1': 'P', 'D2': 'Q', 'D3': 'R', 'D4': 'S', 'D5': 'T', 'D6': 'U'
             }
 
-print(bot_config.admin_ids)
+print(ButtonConfig().__dict__)

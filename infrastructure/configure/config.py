@@ -1,4 +1,5 @@
 import boto3
+import toml
 from dataclasses import dataclass
 from dotenv import load_dotenv
 from os import getenv
@@ -20,6 +21,19 @@ class DatabaseConfig:
     access_key: str
     google_api: str
 
+class StudyConfig:
+    def __init__(self):
+        data = toml.load('infrastructure/configure/reference.toml')
+        self.weekday = data['study']['weekday']
+        self.select_day = data['study']['select_day']
+        self.tasks = data['study']['tasks']
+
+class ButtonConfig:
+    def __init__(self):
+        data = toml.load('infrastructure/configure/reference.toml')
+        self.metodic = data['metodic']
+        self.books = data['books']
+        self.contact = data['contact']
 
 load_dotenv()
 bot_config = TgBot(token=getenv('TOKEN'),

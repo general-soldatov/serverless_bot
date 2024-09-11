@@ -6,6 +6,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 from infrastructure.lexicon.buttons import BUTTONS_RU
 from infrastructure.database import UserUn
+from infrastructure.configure.config import ButtonConfig, StudyConfig
 
 class UserButton:
     def __init__(self, width=3, resize_keyboard=True):
@@ -61,40 +62,33 @@ class UserInline:
     def __init__(self, width: int = 3, resize_keyboard: bool = True):
         self.width = width
         self.resize_keyboard = resize_keyboard
+        self.button = ButtonConfig()
+        self.study = StudyConfig()
 
     def metodic(self) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        books = {
-            'static': 'https://drive.google.com/file/d/172EuTxLjZlYR0GYi03wdbzu70kae4RdC/view?usp=sharing',
-            'kinematic': 'https://drive.google.com/file/d/1i23gh8Kcsu-R5OkyHfdbp7SFUW2c73kx/view?usp=sharing',
-            'dynamic': 'https://drive.google.com/file/d/1wrluEFNR18gYT1wFe-oLsmar9pxSB8ZH/view?usp=sharing'
-        }
+        books: dict = self.button.metodic
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in books.items()]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()
 
     def textbook(self) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        books = {
-            'shortcourse': 'https://drive.google.com/file/d/17OhsVDAaPVkdBEMbjl3wR0Scj7WjeMYo/view?usp=drive_link'
-        }
+        books: dict = self.button.metodic
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in books.items()]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()
 
     def contact(self) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        contacts: dict = {
-            'vk': 'https://vk.com/general_soldatov',
-            'telegram': 'https://t.me/general_soldatov'
-        }
+        contacts: dict = self.button.contact
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in contacts.items()]
         builder.row(*buttons, width=self.width)
         return builder.as_markup()
 
     def shedule(self, day:str = 'today') -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        days: dict = ['today', 'tomorrow', 'after_tom', 'to_2_day']
+        days: dict = self.study.select_day
         days.remove(day)
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[item],
                                               callback_data=SheduleCall(day=item).pack()) for item in days]
@@ -103,7 +97,7 @@ class UserInline:
 
     def graph_task(self, num: list | None = None) -> InlineKeyboardMarkup:
         builder = InlineKeyboardBuilder()
-        task = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'K1', 'K2', 'K3', 'K4', 'K5', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6']
+        task = self.study.tasks
         if not num:
             num = list(range(0, len(task)))
         buttons: list = [InlineKeyboardButton(text=task[item],
