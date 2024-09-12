@@ -5,7 +5,7 @@ from aiogram.filters import Command
 
 from infrastructure.database import UserVar
 from infrastructure.database.user_api import Schedule
-from infrastructure.buttons import UserInline, SheduleCall
+from infrastructure.keyboard import UserInline, SheduleCall
 from infrastructure.lexicon.buttons import BUTTONS_RU
 from infrastructure.lexicon.lexicon_ru import USER
 

@@ -11,8 +11,6 @@ logger = logging.getLogger(__name__)
 async def handler():
     # Bot and dispatcher initialization
     bot = Bot(environ.get('TOKEN'))
-    # Create table
-
     dp = Dispatcher(storage=YDBStorage())
 
     await register_handlers(dp, bot)

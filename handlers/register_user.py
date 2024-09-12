@@ -5,7 +5,7 @@ from aiogram.fsm.state import State, StatesGroup, default_state
 from aiogram.filters import Command, StateFilter
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from infrastructure.buttons import UserButton
+from infrastructure.keyboard import UserButton
 from infrastructure.database import UserApi, UserUn, UserVar
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
 from infrastructure.lexicon.buttons import BUTTONS_RU

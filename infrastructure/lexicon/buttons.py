@@ -16,6 +16,7 @@ BUTTONS_RU: dict = {
     'today': 'Сегодня',
     'tomorrow': 'Завтра',
     'after_tom': 'Послезавтра',
-    'to_2_day': 'Через 2 дня'
+    'to_2_day': 'Через 2 дня',
+    'mailer': 'Рассылка'
 
 }

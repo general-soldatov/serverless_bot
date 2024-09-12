@@ -4,7 +4,7 @@ from infrastructure.configure.config import bot_config
 from infrastructure.database import UserVar
 from infrastructure.lexicon.buttons import BUTTONS_RU
 from infrastructure.lexicon.lexicon_ru import USER
-from infrastructure.buttons import UserInline, GraphTaskCall, GraphTaskScoreCall
+from infrastructure.keyboard import UserInline, GraphTaskCall, GraphTaskScoreCall
 
 def router(dp: Dispatcher, bot: Bot):
     @dp.message(F.text == BUTTONS_RU['graph_task'])

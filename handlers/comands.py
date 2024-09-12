@@ -4,7 +4,7 @@ from aiogram.filters import CommandStart, Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 
-from infrastructure.buttons import UserButton
+from infrastructure.keyboard import UserButton
 from infrastructure.database import UserUn
 from infrastructure.lexicon.lexicon_ru import COMANDS
 
