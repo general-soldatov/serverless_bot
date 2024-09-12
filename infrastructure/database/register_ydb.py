@@ -91,7 +91,7 @@ class UserUn:
         table = self.dynamodb.Table(self.table)
         return table.scan()['Items']
 
-    def for_mailer(self, active=1):
+    def for_mailer(self, active: list = [1, 2]):
         """Метод выгрузки ключей таблицы для рассылки
         """
         table = self.dynamodb.Table(self.table)
@@ -100,7 +100,7 @@ class UserUn:
         }
         response = table.scan(**scan_kwargs)
 
-        return [int(item['user_id']) for item in response['Items'] if int(item['active']) == active]
+        return [int(item['user_id']) for item in response['Items'] if int(item['active']) in active]
 
     def delete_note(self, user_id):
         """Метод удаления записи из базы данных.

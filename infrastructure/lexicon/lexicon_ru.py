@@ -32,4 +32,11 @@ USER: dict = {
     'graph_task_score_prepod': 'Обучающемуся {name} выставлен балл "{score}" за задачу {task}.',
     'graph_task_score_user': 'Поздравляю! За задачу {task} тебе выставлен балл "{score}".',
     'permission_denied': 'Ошибка! Доступ запрещён!'
+
+}
+
+ADMIN: dict = {
+    'mailer': 'Выберите профиль обучающихся для рассылки.',
+    'message_mailer': 'Введите сообщение для рассылки.',
+    'available': 'Подтвердите отправку для {profile} {group}.'
 }

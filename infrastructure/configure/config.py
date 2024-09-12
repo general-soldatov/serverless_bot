@@ -35,6 +35,13 @@ class ButtonConfig:
         self.books = data['books']
         self.contact = data['contact']
 
+class AdminConfig:
+    def __init__(self):
+        data = toml.load('infrastructure/configure/reference.toml')
+        self.profile = data['mailer']['profile']
+        self.group = data['mailer']['group']
+
+
 load_dotenv()
 bot_config = TgBot(token=getenv('TOKEN'),
                    admin_ids=getenv('ADMIN_IDS'),

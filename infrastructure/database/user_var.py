@@ -110,6 +110,17 @@ class UserVar:
         table = self.dynamodb.Table(self.table)
         return table.scan()['Items']
 
+    def for_mailer(self, profile, group):
+        """Метод выгрузки ключей таблицы для рассылки
+        """
+        table = self.dynamodb.Table(self.table)
+        scan_kwargs = {
+            'ProjectionExpression': "user_id, profile, group"
+        }
+        response = table.scan(**scan_kwargs)
+
+        return [int(item['user_id']) for item in response['Items'] if item['profile'] == profile and item['group'] == group]
+
     def delete_note(self, user_id):
         table = self.dynamodb.Table(self.table)
         try:

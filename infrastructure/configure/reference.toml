@@ -18,3 +18,7 @@ shortcourse = 'https://drive.google.com/file/d/17OhsVDAaPVkdBEMbjl3wR0Scj7WjeMYo
 [contact]
 vk = 'https://vk.com/general_soldatov'
 telegram = 'https://t.me/general_soldatov'
+
+[mailer]
+profile = ['Все', 'НТТС', 'Агроинженерия']
+group = ['1-а', '1-б', '8-а', '8-б', '9-а']
