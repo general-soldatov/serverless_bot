@@ -29,4 +29,4 @@ task_head = {
 # for item in data['tasks'].keys():
 #     lst_task.remove(item)
 # print(data['name'], lst_task)
-print(UserVar().get_user(user_id=980314213))
+print(UserVar().delete_note(122))

@@ -39,7 +39,7 @@ class AdminConfig:
     def __init__(self):
         data = toml.load('infrastructure/configure/reference.toml')
         self.profile = data['mailer']['profile']
-        self.group = data['mailer']['group']
+        self.group = data['mailer']
 
 
 load_dotenv()

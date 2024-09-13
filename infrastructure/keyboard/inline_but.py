@@ -99,9 +99,10 @@ class AdminInline(InlineKeyboard):
         return self.builder_row(buttons=buttons, width=self.width)
 
     def mailer_group(self, profile: str):
+        group = AdminConfig().group[profile]
         buttons: list = [InlineKeyboardButton(text=str(item),
                                               callback_data=MailGroup(profile=profile,
-                                                                      group=item).pack()) for item in AdminConfig().group]
+                                                                      group=item).pack()) for item in group]
         return self.builder_row(buttons=buttons, width=self.width)
 
     def available(self, message_id):

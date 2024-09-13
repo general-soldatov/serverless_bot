@@ -1,9 +1,12 @@
 import boto3
+import logging
 from boto3.dynamodb.conditions import Key
 from os import getenv
 from dotenv import load_dotenv
 
 from infrastructure.configure.config import dynamodb_config
+
+logger = logging.getLogger(__name__)
 
 class UserVar:
     def __init__(self, dynamodb=None):
@@ -118,8 +121,10 @@ class UserVar:
             'ProjectionExpression': "user_id, profile, group"
         }
         response = table.scan(**scan_kwargs)
-
-        return [int(item['user_id']) for item in response['Items'] if item['profile'] == profile and item['group'] == group]
+        try:
+            return [int(item['user_id']) for item in response['Items'] if item['profile'] == profile and item['group'] == group]
+        except Exception as e:
+            logger.error(f'{e}')
 
     def delete_note(self, user_id):
         table = self.dynamodb.Table(self.table)
