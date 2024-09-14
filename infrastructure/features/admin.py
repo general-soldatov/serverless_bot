@@ -18,6 +18,10 @@ class Mailer(StatesGroup):
     group = State()
     confirmation = State()
 
+class QuestionReply(StatesGroup):
+    reply = State()
+    available = State()
+
 class AdminFeatures:
     def __init__(self, bot: Bot):
         self.bot = bot
@@ -41,38 +45,49 @@ class AdminFeatures:
                                   callback_data: Available, state: FSMContext):
         data = await state.get_data()
         errors = {}
-        if callback_data.go:
-            if data['profile'] == 'all':
-                for item in UserUn().for_mailer():
+        if data['profile'] == 'all':
+            for item in UserUn().for_mailer():
+                try:
+                    await self.bot.copy_message(from_chat_id=callback.from_user.id,
+                                            chat_id=item,
+                                            message_id=callback_data.message_id)
+                except TelegramAPIError as e:
+                    if 'Bad Request: chat not found' in e.__str__():
+                        UserUn().update_active(user_id=item, active=0)
+                        errors[item] = e
+                        logger.error(e)
+
+                except Exception as e:
+                    logger.error(e)
+                    errors[item] = e
+
+        else:
+            user = UserVar().for_mailer(profile=data['profile'], group=data['group'])
+            if user:
+                for item in user:
                     try:
                         await self.bot.copy_message(from_chat_id=callback.from_user.id,
-                                               chat_id=item,
-                                               message_id=callback_data.message_id)
-                    except TelegramAPIError as e:
-                        if 'Bad Request: chat not found' in e.__str__():
-                            UserUn().update_active(user_id=item, active=0)
-                            errors[item] = e
-                            logger.error(e)
+                                            chat_id=item,
+                                            message_id=callback_data.message_id)
 
                     except Exception as e:
                         logger.error(e)
                         errors[item] = e
 
             else:
-                user = UserVar().for_mailer(profile=data['profile'], group=data['group'])
-                if user:
-                    for item in user:
-                        try:
-                            await self.bot.copy_message(from_chat_id=callback.from_user.id,
-                                                chat_id=item,
-                                                message_id=callback_data.message_id)
+                errors['all'] = 'not users'
+        await callback.message.edit_text(text=ADMIN['mailer_done'].format(errors=errors))
 
-                        except Exception as e:
-                            logger.error(e)
-                            errors[item] = e
 
-                else:
-                    errors['all'] = 'not users'
-            await callback.message.edit_text(text=ADMIN['mailer_done'].format(errors=errors))
-        else:
-            await callback.message.edit_text(text=ADMIN['mailer_cancel'])
+    async def reply_question(self, callback: types.CallbackQuery,
+                                  callback_data: Available, state: FSMContext):
+        data = await state.get_data()
+        try:
+            await self.bot.send_message(chat_id=data['user_id'], text=ADMIN['send_question'])
+            await self.bot.copy_message(chat_id=data['user_id'],
+                                    from_chat_id=callback.from_user.id,
+                                    message_id=callback_data.message_id)
+            await callback.message.edit_text(text=ADMIN['question_succesful'].format(user_id=data['user_id']))
+        except Exception as e:
+            logger.error(e)
+            await callback.message.edit_text(text=ADMIN['question_error'].format(error=e))

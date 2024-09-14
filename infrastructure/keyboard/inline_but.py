@@ -35,6 +35,8 @@ class GraphTaskScoreCall(CallbackData, prefix='p_t'):
     user_id: str
     name: str
 
+class UserQuestion(CallbackData, prefix='faq'):
+    user_id: int
 
 class UserInline(InlineKeyboard):
 
@@ -51,6 +53,11 @@ class UserInline(InlineKeyboard):
     def contact(self) -> InlineKeyboardMarkup:
         contacts: dict = self.button.contact
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in contacts.items()]
+        buttons.append(InlineKeyboardButton(text=BUTTONS_RU['question'], callback_data='question'))
+        return self.builder_row(buttons=buttons, width=self.width)
+
+    def question(self, user_id: int) -> InlineKeyboardMarkup:
+        buttons: list = [InlineKeyboardButton(text=BUTTONS_RU['send'], callback_data=UserQuestion(user_id=user_id).pack())]
         return self.builder_row(buttons=buttons, width=self.width)
 
     def shedule(self, day:str = 'today') -> InlineKeyboardMarkup:
@@ -80,14 +87,12 @@ class UserInline(InlineKeyboard):
         return self.builder_row(buttons=buttons, width=self.width)
 
 
-# class ProfileGroup(CallbackData, prefix='pro_group'):
-#     profile: str
-
 class MailGroup(CallbackData, prefix='mail_group'):
     profile: str
     group: str
 
 class Available(CallbackData, prefix='av-le'):
+    data: str
     go: bool
     message_id: int
 
@@ -105,9 +110,10 @@ class AdminInline(InlineKeyboard):
                                                                       group=item).pack()) for item in group]
         return self.builder_row(buttons=buttons, width=self.width)
 
-    def available(self, message_id):
+    def available(self, message_id, data='mailer'):
         text = ['no', 'yes']
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[item],
                                               callback_data=Available(go=i,
-                                                                      message_id=message_id).pack()) for i, item in enumerate(text)]
+                                                                      message_id=message_id,
+                                                                      data=data).pack()) for i, item in enumerate(text)]
         return self.builder_row(buttons=buttons, width=self.width)

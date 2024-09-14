@@ -31,6 +31,9 @@ USER: dict = {
     'graph_task_call': 'Заявка на приём задачи {task} отправлена преподавателю.',
     'graph_task_score_prepod': 'Обучающемуся {name} выставлен балл "{score}" за задачу {task}.',
     'graph_task_score_user': 'Поздравляю! За задачу {task} тебе выставлен балл "{score}".',
+    'question': 'Задайте свой вопрос преподавателю!',
+    'get_question': 'Спасибо, вопрос отправлен преподавателю!',
+    'send_question': '## Вопрос {user_id}\nОбучающийся {name}, {profile}-{group}',
     'permission_denied': 'Ошибка! Доступ запрещён!'
 
 }
@@ -41,5 +44,10 @@ ADMIN: dict = {
     'message_mailer': 'Введите сообщение для рассылки.',
     'available': 'Подтвердите отправку для {profile} {group}.',
     'mailer_done': 'Рассылка завершена! Ошибки отправки:\n {errors}',
-    'mailer_cancel': 'Рассылка отменена администратором.'
+    'mailer_cancel': 'Рассылка отменена администратором.',
+    'reply_question': 'Напишите ответ на вопрос.',
+    'send_question': 'Получен ответ от преподавателя.',
+    'available_reply': 'Подтвердите отправку ответа.',
+    'question_succesful': 'Ответ отправлен для {user_id}.',
+    'question_error': 'Возникла ошибка {error}'
 }

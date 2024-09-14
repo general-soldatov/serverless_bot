@@ -12,7 +12,7 @@ async def register_handlers(dp: Dispatcher, bot: Bot):
     comands.router(dp)
     admin.router(dp, bot)
     register_user.router(dp, bot)
-    aut_user.router(dp)
+    aut_user.router(dp, bot)
     graph_task.router(dp, bot)
     task_solve.router(dp)
     # menu.router(dp)
