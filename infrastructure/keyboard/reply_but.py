@@ -3,7 +3,7 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.types.web_app_info import WebAppInfo
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU
 from infrastructure.database import UserUn
 
 class UserButton:

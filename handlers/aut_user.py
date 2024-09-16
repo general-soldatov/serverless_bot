@@ -9,8 +9,7 @@ from infrastructure.database import UserVar
 from infrastructure.database.user_api import Schedule
 from infrastructure.configure.config import bot_config
 from infrastructure.keyboard import UserInline, SheduleCall
-from infrastructure.configure.lexicon import BUTTONS_RU
-from infrastructure.lexicon.lexicon_ru import USER
+from infrastructure.configure.lexicon import BUTTONS_RU, USER
 
 log = logging.getLogger(__name__)
 

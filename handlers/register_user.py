@@ -6,8 +6,7 @@ from aiogram.filters import Command, StateFilter
 
 from infrastructure.keyboard import UserButton
 from infrastructure.database import UserApi, UserUn, UserVar
-from infrastructure.lexicon.lexicon_ru import COMANDS, USER
-from infrastructure.configure.lexicon import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU, COMMANDS, USER
 from infrastructure.configure.config import bot_config
 
 
@@ -20,7 +19,7 @@ def router(dp: Dispatcher, bot: Bot):
     @dp.message(Command(commands='register'))
     async def cmd_register(message: Message, state: FSMContext):
         await state.set_state(Register.name_user.state)
-        await message.answer(COMANDS['register'])
+        await message.answer(COMMANDS['register'])
 
 
     @dp.message(StateFilter(Register.name_user))

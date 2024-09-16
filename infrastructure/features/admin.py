@@ -6,8 +6,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramAPIError
 
 from infrastructure.database import UserUn, UserVar
-from infrastructure.lexicon.lexicon_ru import ADMIN
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import ADMIN, BUTTONS_RU
 from infrastructure.keyboard.inline_but import Available, AdminInline
 
 logger = logging.getLogger(__name__)

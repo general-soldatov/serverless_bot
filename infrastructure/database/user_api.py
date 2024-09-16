@@ -33,14 +33,13 @@ class Schedule:
         self.weekdays = self.study.weekday
 
     def __call__(self, day: str) -> str:
-        days = self.study.select_day
-        date_to = days.index(day)
+        date_to = self.study.select_day.index(day)
         calendar = self.go_day(date_to)
         shedule: dict = self.connect.schedule(week=((calendar.week+1) % 2),
                               day=self.weekdays[calendar.weekday])
         return self.weekdays[calendar.weekday], shedule
 
     @staticmethod
-    def go_day(day):
+    def go_day(day: int):
         need_day = datetime.now() + timedelta(days=day)
         return need_day.isocalendar()

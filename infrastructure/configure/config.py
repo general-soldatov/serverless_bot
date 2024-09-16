@@ -27,7 +27,7 @@ data = toml.load('infrastructure/configure/reference.toml')
 class StudyConfig:
     def __init__(self):
         self.weekday = data['study']['weekday']
-        self.select_day = data['study']['select_day']
+        self.select_day = list(data['study']['select_day'])
         self.tasks = data['study']['tasks']
 
 class ButtonConfig:

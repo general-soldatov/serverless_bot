@@ -2,7 +2,7 @@ from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU
 from infrastructure.database import UserVar
 from infrastructure.configure.config import ButtonConfig, StudyConfig, AdminConfig
 

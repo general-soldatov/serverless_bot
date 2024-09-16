@@ -5,7 +5,7 @@ from aiogram.types import TelegramObject, User
 
 from infrastructure.configure.config import bot_config, MenuConfig
 from infrastructure.database import UserUn
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU
 
 from pprint import pprint
 

@@ -2,7 +2,10 @@ import json
 from infrastructure.database import UserSheet, UserVar
 from infrastructure.database.user_api import UserApi
 import requests
-from infrastructure.configure.config import ButtonConfig
+import toml
+from infrastructure.configure.config import ButtonConfig, StudyConfig
+from infrastructure.database.user_api import Schedule
+from infrastructure.configure.lexicon import USER, ADMIN, COMMANDS
 
 def schedule_json():
     data = UserSheet(user_id='333').shedule()
@@ -29,4 +32,12 @@ task_head = {
 # for item in data['tasks'].keys():
 #     lst_task.remove(item)
 # print(data['name'], lst_task)
-print(UserVar().delete_note(122))
+# print(UserVar().delete_note(122))
+def writer_toml(text):
+    with open('infrastructure/configure/lexicon.toml', 'a', encoding='utf-8') as file:
+        text = toml.dumps(text)
+        file.write(text)
+        print('Succesful')
+
+weekday, shedules = Schedule()(day='today')
+print(weekday, shedules)
