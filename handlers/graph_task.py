@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, types, F
 
 from infrastructure.configure.config import bot_config
 from infrastructure.database import UserVar
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU
 from infrastructure.lexicon.lexicon_ru import USER
 from infrastructure.keyboard import UserInline, GraphTaskCall, GraphTaskScoreCall
 

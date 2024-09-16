@@ -7,7 +7,7 @@ from aiogram.filters import Command, StateFilter
 from infrastructure.keyboard import UserButton
 from infrastructure.database import UserApi, UserUn, UserVar
 from infrastructure.lexicon.lexicon_ru import COMANDS, USER
-from infrastructure.lexicon.buttons import BUTTONS_RU
+from infrastructure.configure.lexicon import BUTTONS_RU
 from infrastructure.configure.config import bot_config
 
 

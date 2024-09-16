@@ -23,7 +23,7 @@ class UserButton:
 
     def _builder(self, buttons: list[KeyboardButton]) -> ReplyKeyboardMarkup:
         kp_build = ReplyKeyboardBuilder()
-        kp_build.row(*buttons)
+        kp_build.row(*buttons, width=self.width)
         return kp_build.as_markup(resize_keyboard=self.resize_keyboard)
 
     def user_name(self) -> ReplyKeyboardMarkup:

@@ -21,29 +21,28 @@ class DatabaseConfig:
     access_key: str
     google_api: str
 
+# Загрузка TOML-файла
+data = toml.load('infrastructure/configure/reference.toml')
+
 class StudyConfig:
     def __init__(self):
-        data = toml.load('infrastructure/configure/reference.toml')
         self.weekday = data['study']['weekday']
         self.select_day = data['study']['select_day']
         self.tasks = data['study']['tasks']
 
 class ButtonConfig:
     def __init__(self):
-        data = toml.load('infrastructure/configure/reference.toml')
         self.metodic = data['metodic']
         self.books = data['books']
         self.contact = data['contact']
 
 class AdminConfig:
     def __init__(self):
-        data = toml.load('infrastructure/configure/reference.toml')
         self.profile = data['mailer']['profile']
         self.group = data['mailer']
 
 class MenuConfig:
     def __init__(self):
-        data = toml.load('infrastructure/configure/reference.toml')
         self.junior = data['junior']
         self.middle = data['middle']
         self.admin = data['admin']
