@@ -46,7 +46,7 @@ class UserUn:
         )
         return table
 
-    def put_item(self, user_id, name, active=1):
+    def put_item(self, user_id: int, name: str, active=1):
         """Метод добавления записи в таблицу.
         """
         table = self.dynamodb.Table(self.table)
@@ -59,7 +59,7 @@ class UserUn:
         )
         return response
 
-    def update_active(self, user_id, active):
+    def update_active(self, user_id: int, active: int):
         """Метод смены активности в случае блокировки бота пользователем.
         """
         table = self.dynamodb.Table(self.table)
@@ -75,7 +75,7 @@ class UserUn:
         )
         return response
 
-    def info_user(self, user_id):
+    def info_user(self, user_id: int):
         """Метод запроса информации по ключу партицирования
         """
         table = self.dynamodb.Table(self.table)

@@ -41,6 +41,13 @@ class AdminConfig:
         self.profile = data['mailer']['profile']
         self.group = data['mailer']
 
+class MenuConfig:
+    def __init__(self):
+        data = toml.load('infrastructure/configure/reference.toml')
+        self.junior = data['junior']
+        self.middle = data['middle']
+        self.admin = data['admin']
+
 
 load_dotenv()
 bot_config = TgBot(token=getenv('TOKEN'),

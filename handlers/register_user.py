@@ -1,9 +1,8 @@
-from aiogram import Bot, Dispatcher, types, F
-from aiogram.types import Message, KeyboardButton
+from aiogram import Bot, Dispatcher, F
+from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup, default_state
+from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command, StateFilter
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 from infrastructure.keyboard import UserButton
 from infrastructure.database import UserApi, UserUn, UserVar

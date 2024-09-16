@@ -1,11 +1,9 @@
-from aiogram import types, F
 from aiogram.filters.callback_data import CallbackData
-from aiogram.types import KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-from aiogram.types.web_app_info import WebAppInfo
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from infrastructure.lexicon.buttons import BUTTONS_RU
-from infrastructure.database import UserUn, UserVar
+from infrastructure.database import UserVar
 from infrastructure.configure.config import ButtonConfig, StudyConfig, AdminConfig
 
 class InlineKeyboard:
@@ -46,7 +44,7 @@ class UserInline(InlineKeyboard):
         return self.builder_row(buttons=buttons, width=self.width)
 
     def textbook(self) -> InlineKeyboardMarkup:
-        books: dict = self.button.metodic
+        books: dict = self.button.books
         buttons: list = [InlineKeyboardButton(text=BUTTONS_RU[key], url=value) for key, value in books.items()]
         return self.builder_row(buttons=buttons, width=self.width)
 
@@ -87,11 +85,11 @@ class UserInline(InlineKeyboard):
         return self.builder_row(buttons=buttons, width=self.width)
 
 
-class MailGroup(CallbackData, prefix='mail_group'):
+class MailGroup(CallbackData, prefix='cr_mail_group'):
     profile: str
     group: str
 
-class Available(CallbackData, prefix='av-le'):
+class Available(CallbackData, prefix='cr_av-le'):
     data: str
     go: bool
     message_id: int

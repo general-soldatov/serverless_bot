@@ -2,7 +2,6 @@ import logging
 
 from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramAPIError
 

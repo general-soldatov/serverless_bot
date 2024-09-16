@@ -23,3 +23,14 @@ telegram = 'https://t.me/general_soldatov'
 profile = ['Все', 'НТТС', 'Агроинженерия']
 Агроинженерия = ['1-а', '1-б']
 НТТС = ['8-а', '8-б', '9-а']
+
+[junior]
+commands = ['/start', '/help', '/menu', '/cancel', '/register']
+message = ['metodic', 'textbook', 'contact']
+
+[middle]
+message = ['profile', 'graph_task', 'shedule']
+
+[admin]
+commands = ['admin']
+message = ['mailer']

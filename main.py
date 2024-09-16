@@ -7,6 +7,7 @@ from __app__ import register_handlers
 from infrastructure.database import YDBStorage
 
 logger = logging.getLogger(__name__)
+logger.setLevel('INFO')
 
 async def handler():
     # Bot and dispatcher initialization

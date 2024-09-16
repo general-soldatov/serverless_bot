@@ -1,12 +1,10 @@
 import logging
 from aiogram import Bot, Dispatcher, types, F
-from aiogram.fsm.state import State, StatesGroup, default_state
+from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import Command, StateFilter
-from aiogram.exceptions import TelegramAPIError
+from aiogram.filters import StateFilter
 
 from infrastructure.configure.config import bot_config
-from infrastructure.database import UserVar, UserUn
 from infrastructure.lexicon.buttons import BUTTONS_RU
 from infrastructure.lexicon.lexicon_ru import ADMIN
 from infrastructure.keyboard import AdminInline, MailGroup, Available, UserQuestion
@@ -14,8 +12,9 @@ from infrastructure.features import AdminFeatures, Mailer, QuestionReply
 
 logger = logging.getLogger(__name__)
 
-
 def router(dp: Dispatcher, bot: Bot):
+
+
     @dp.message(F.text == BUTTONS_RU['mailer'], StateFilter(default_state), F.from_user.id == int(bot_config.admin_ids))
     async def mailer(message: types.Message, state: FSMContext):
         buttons = AdminInline(width=4).mailer_profile()
