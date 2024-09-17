@@ -25,15 +25,15 @@ def router(dp: Dispatcher):
         await message.answer(text=COMMANDS['help'])
 
     @dp.message(Command(commands=['menu']))
-    async def help(message: types.Message):
+    async def menu(message: types.Message):
         buttons = UserButton(width=3)(user_id=message.from_user.id)
         await message.answer(text=COMMANDS['menu'], reply_markup=buttons)
 
     @dp.message(Command(commands=['cancel']), StateFilter(default_state))
-    async def help(message: types.Message):
+    async def cancel(message: types.Message):
         await message.answer(text=COMMANDS['cancel_not'])
 
     @dp.message(Command(commands=['cancel']), ~StateFilter(default_state))
-    async def help(message: types.Message, state: FSMContext):
+    async def cancel_state(message: types.Message, state: FSMContext):
         await message.answer(text=COMMANDS['cancel'])
         await state.clear()

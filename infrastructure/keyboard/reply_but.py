@@ -21,15 +21,16 @@ class UserButton:
             return self.unauth_user()
         return False
 
-    def _builder(self, buttons: list[KeyboardButton]) -> ReplyKeyboardMarkup:
+    @staticmethod
+    def _builder(buttons: list[KeyboardButton], width=3, resize_keyboard=True) -> ReplyKeyboardMarkup:
         kp_build = ReplyKeyboardBuilder()
-        kp_build.row(*buttons, width=self.width)
-        return kp_build.as_markup(resize_keyboard=self.resize_keyboard)
+        kp_build.row(*buttons, width=width)
+        return kp_build.as_markup(resize_keyboard=resize_keyboard)
 
     def user_name(self) -> ReplyKeyboardMarkup:
         available = ['no', 'yes']
         buttons: list[KeyboardButton] = [KeyboardButton(text=BUTTONS_RU[item]) for item in available]
-        return self._builder(buttons)
+        return self._builder(buttons, width=self.width, resize_keyboard=self.resize_keyboard)
 
 
     def auth_user(self) -> ReplyKeyboardMarkup:
@@ -37,7 +38,7 @@ class UserButton:
         btn = types.KeyboardButton(text=BUTTONS_RU[box_button[0]], web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
         buttons: list[KeyboardButton] = [btn]
         buttons.extend([KeyboardButton(text=BUTTONS_RU[item]) for item in box_button[1:]])
-        return self._builder(buttons)
+        return self._builder(buttons, width=self.width, resize_keyboard=self.resize_keyboard)
 
     def admin_user(self) -> ReplyKeyboardMarkup:
         pass
@@ -45,4 +46,4 @@ class UserButton:
     def unauth_user(self) -> ReplyKeyboardMarkup:
         box_button = ['metodic', 'textbook', 'contact']
         buttons: list[KeyboardButton] = [KeyboardButton(text=BUTTONS_RU[item]) for item in box_button]
-        return self._builder(buttons)
+        return self._builder(buttons, width=self.width, resize_keyboard=self.resize_keyboard)
