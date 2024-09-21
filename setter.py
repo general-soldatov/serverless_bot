@@ -39,5 +39,7 @@ def writer_toml(text):
         file.write(text)
         print('Succesful')
 
-weekday, shedules = Schedule()(day='today')
-print(weekday, shedules)
+# weekday, shedules = Schedule()(day='today')
+# print(weekday, shedules)
+
+UserVar().set_prize(user_id=980314213, prize=25)

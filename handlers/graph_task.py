@@ -19,7 +19,7 @@ def router(dp: Dispatcher, bot: Bot):
     @dp.callback_query(GraphTaskCall.filter())
     async def graph_task_call(callback: types.CallbackQuery,
                            callback_data: GraphTaskCall):
-        button = UserInline(width=7).prepod_task(task=callback_data.task,
+        button = UserInline(width=5).prepod_task(task=callback_data.task,
                                                  user_id=str(callback.from_user.id),
                                                  name=callback_data.name)
         await bot.send_message(chat_id=bot_config.admin_ids,

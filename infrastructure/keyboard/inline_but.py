@@ -77,11 +77,11 @@ class UserInline(InlineKeyboard):
                                                                           name=name).pack()) for item in task]
         return self.builder_row(buttons=buttons, width=self.width)
 
-    def prepod_task(self, task, user_id, name) -> InlineKeyboardMarkup:
+    def prepod_task(self, task, user_id, name, score=9) -> InlineKeyboardMarkup:
         buttons: list = [InlineKeyboardButton(text=str(item),
                                               callback_data=GraphTaskScoreCall(task=task,
                                                                                score=str(item),
-                                                                               user_id=user_id, name=name).pack()) for item in range(self.width)]
+                                                                               user_id=user_id, name=name).pack()) for item in range(score)]
         return self.builder_row(buttons=buttons, width=self.width)
 
 

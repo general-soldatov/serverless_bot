@@ -16,7 +16,7 @@ class UserButton:
         if self.user[0]['active'] == 3:
             return self.auth_user()
         if self.user[0]['active'] == 2:
-            return self.auth_user()
+            return self.auth_user(user_id)
         if self.user[0]['active'] == 1:
             return self.unauth_user()
         return False
@@ -33,9 +33,9 @@ class UserButton:
         return self._builder(buttons, width=self.width, resize_keyboard=self.resize_keyboard)
 
 
-    def auth_user(self) -> ReplyKeyboardMarkup:
+    def auth_user(self, user_id) -> ReplyKeyboardMarkup:
         box_button = ['profile', 'metodic', 'textbook', 'graph_task', 'shedule', 'contact']
-        btn = types.KeyboardButton(text=BUTTONS_RU[box_button[0]], web_app=WebAppInfo(url='https://docs.aiogram.dev/en/v2.25.1/telegram/types/reply_keyboard.html'))
+        btn = types.KeyboardButton(text=BUTTONS_RU[box_button[0]], web_app=WebAppInfo(url=f'https://d5dvtf5ioi8q69ckjelk.apigw.yandexcloud.net/telegram_bot/bot={user_id}'))
         buttons: list[KeyboardButton] = [btn]
         buttons.extend([KeyboardButton(text=BUTTONS_RU[item]) for item in box_button[1:]])
         return self._builder(buttons, width=self.width, resize_keyboard=self.resize_keyboard)

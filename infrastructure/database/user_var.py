@@ -42,12 +42,20 @@ class UserVar:
                 "AttributeName": "group",
                 "AttributeType": "S"
                 },
+                {
+                "AttributeName": "fine",
+                "AttributeType": "N"
+                },
+                {
+                "AttributeName": "prize",
+                "AttributeType": "N"
+                }
 
             ]
         )
         return table
 
-    def put_item(self, user_id, name, profile, group, var, var_d1):
+    def put_item(self, user_id, name, profile, group, var, var_d1, fine=0, prize=0):
         table = self.dynamodb.Table(self.table)
         all_var = {'var_all': var, 'var_d1': var_d1}
         tasks = {'S0': 0}
@@ -63,6 +71,8 @@ class UserVar:
                     'profile': profile,
                     'group': group,
                     'var': all_var,
+                    'fine': fine,
+                    'prize': prize,
                     'tasks': tasks,
                     'bonus': bonus
             }
@@ -83,6 +93,34 @@ class UserVar:
         )
         return response
 
+    def set_fine(self, user_id, fine):
+        table = self.dynamodb.Table(self.table)
+        response = table.update_item(
+            Key = {
+                'user_id': user_id
+            },
+            UpdateExpression = f"set fine = :f ",
+            ExpressionAttributeValues = {
+                ':f': fine
+            },
+            ReturnValues = "UPDATED_NEW"
+        )
+        return response
+
+    def set_prize(self, user_id, prize):
+        table = self.dynamodb.Table(self.table)
+        response = table.update_item(
+            Key = {
+                'user_id': user_id
+            },
+            UpdateExpression = f"set prize = :p ",
+            ExpressionAttributeValues = {
+                ':p': prize
+            },
+            ReturnValues = "UPDATED_NEW"
+        )
+        return response
+
     def get_user(self, user_id):
         """Метод запроса информации о пользователе по ключу партицирования
         """
@@ -93,6 +131,7 @@ class UserVar:
             }
         )
         return response['Item']
+
 
     def add_bonus(self, user_id, category, task):
         table = self.dynamodb.Table(self.table)

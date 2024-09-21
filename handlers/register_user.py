@@ -41,7 +41,7 @@ def router(dp: Dispatcher, bot: Bot):
     async def app_user(message: Message, state: FSMContext):
         register = UserUn()
         register.update_active(user_id=message.from_user.id, active=2)
-        button_markup = UserButton().auth_user()
+        button_markup = UserButton().auth_user(user_id=message.from_user.id)
         user_data = await state.get_data()
         UserVar().put_item(user_id=message.from_user.id,
                            name=user_data['name'],
