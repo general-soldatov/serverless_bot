@@ -104,12 +104,10 @@ class AdminFeatures:
         elif callback_data.group == '0':
             buttons = AdminInline(width=4).mailer_group(profile=callback_data.profile, Group=PrizeGroup)
             await callback.message.edit_text(text=ADMIN['score_group'], reply_markup=buttons)
-            # await state.set_state(PrizeStudents.profile.state)
+
         else:
             buttons = AdminInline(width=2).lst_study(callback_data.profile, callback_data.group)
             await callback.message.edit_text(text=ADMIN['stat_info'], reply_markup=buttons)
-            # await state.set_data(data={'profile': callback_data.profile, 'group': callback_data.group})
-            # await state.set_state(PrizeStudents.group.state)
 
     async def set_score(self, message: types.Message, state: FSMContext):
         data = await state.get_data()

@@ -2,16 +2,26 @@ import logging
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import StateFilter
+from aiogram.filters import StateFilter, Command
 
 from infrastructure.configure.config import bot_config
-from infrastructure.configure.lexicon import BUTTONS_RU, ADMIN
-from infrastructure.keyboard import AdminInline, MailGroup, Available, UserQuestion, ScoreGroup, PrizeGroup
+from infrastructure.configure.lexicon import BUTTONS_RU, ADMIN, COMMANDS
+from infrastructure.keyboard import AdminInline, UserButton, MailGroup, Available, UserQuestion, ScoreGroup, PrizeGroup
 from infrastructure.features import AdminFeatures, Mailer, QuestionReply, PrizeStudents
 
 logger = logging.getLogger(__name__)
 
 def router(dp: Dispatcher, bot: Bot):
+
+    @dp.message(Command(commands='admin'))
+    async def cmd_admin(message: types.Message):
+        buttons = UserButton().admin_user()
+        await message.answer(text=COMMANDS['admin'], reply_markup=buttons)
+
+    @dp.message(F.text == BUTTONS_RU['exit_admin'])
+    async def admin_exit(message: types.Message):
+        buttons = UserButton(width=3)(user_id=message.from_user.id)
+        await message.answer(text=COMMANDS['menu'], reply_markup=buttons)
 
 
     @dp.message(F.text == BUTTONS_RU['mailer'], StateFilter(default_state), F.from_user.id == int(bot_config.admin_ids))

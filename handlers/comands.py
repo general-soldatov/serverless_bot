@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 def router(dp: Dispatcher):
 
-    @dp.message(CommandStart())
+    @dp.message(Command(commands=['start', 'restart']))
     async def start(message: types.Message):
         register = UserUn()
         register.put_item(user_id=message.from_user.id, name=message.from_user.first_name)
