@@ -6,8 +6,8 @@ from aiogram.filters import StateFilter
 
 from infrastructure.configure.config import bot_config
 from infrastructure.configure.lexicon import BUTTONS_RU, ADMIN
-from infrastructure.keyboard import AdminInline, MailGroup, Available, UserQuestion
-from infrastructure.features import AdminFeatures, Mailer, QuestionReply
+from infrastructure.keyboard import AdminInline, MailGroup, Available, UserQuestion, ScoreGroup, PrizeGroup
+from infrastructure.features import AdminFeatures, Mailer, QuestionReply, PrizeStudents
 
 logger = logging.getLogger(__name__)
 
@@ -61,3 +61,27 @@ def router(dp: Dispatcher, bot: Bot):
         button = AdminInline().available(message_id=message.message_id, data='question')
         await state.set_state(QuestionReply.available.state)
         await message.answer(text=ADMIN['available_reply'], reply_markup=button)
+
+    @dp.message(F.text == BUTTONS_RU['stat_info'], StateFilter(default_state), F.from_user.id == int(bot_config.admin_ids))
+    async def mailer(message: types.Message, state: FSMContext):
+        # buttons = AdminInline(width=2).lst_study()
+        buttons = AdminInline().mailer_profile(PrizeGroup)
+        await message.answer(text=ADMIN['score'], reply_markup=buttons)
+        # await state.set_state(PrizeStudents.profile.state)
+
+    @dp.callback_query(PrizeGroup.filter(), F.from_user.id == int(bot_config.admin_ids))
+    async def callback_score(callback: types.CallbackQuery,
+                              callback_data: PrizeGroup, state: FSMContext):
+        await AdminFeatures(bot).select_score(callback, callback_data, state)
+
+    @dp.callback_query(ScoreGroup.filter(), F.from_user.id == int(bot_config.admin_ids))
+    async def reply_score(callback: types.CallbackQuery,
+                             callback_data: ScoreGroup, state: FSMContext):
+        await callback.message.answer(text=ADMIN['score_group_case'])
+        await state.set_data(data={'user_id': callback_data.user_id, 'message_id': callback.message.message_id})
+        await state.set_state(PrizeStudents.score.state)
+        await callback.answer()
+
+    @dp.message(StateFilter(PrizeStudents.score))
+    async def set_score(message: types.Message, state: FSMContext):
+        await AdminFeatures(bot).set_score(message, state)

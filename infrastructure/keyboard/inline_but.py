@@ -94,17 +94,25 @@ class Available(CallbackData, prefix='cr_av-le'):
     go: bool
     message_id: int
 
+class ScoreGroup(CallbackData, prefix='score_gr'):
+    user_id: int
+    operation: str
+
+class PrizeGroup(CallbackData, prefix='prize_group'):
+    profile: str
+    group: str
+
 class AdminInline(InlineKeyboard):
-    def mailer_profile(self):
+    def mailer_profile(self, Group: CallbackData = MailGroup):
         buttons: list = [InlineKeyboardButton(text=str(item),
-                                              callback_data=MailGroup(profile=item,
+                                              callback_data=Group(profile=item,
                                                                       group='0').pack()) for item in AdminConfig().profile]
         return self.builder_row(buttons=buttons, width=self.width)
 
-    def mailer_group(self, profile: str):
+    def mailer_group(self, profile: str, Group: CallbackData = MailGroup):
         group = AdminConfig().group[profile]
         buttons: list = [InlineKeyboardButton(text=str(item),
-                                              callback_data=MailGroup(profile=profile,
+                                              callback_data=Group(profile=profile,
                                                                       group=item).pack()) for item in group]
         return self.builder_row(buttons=buttons, width=self.width)
 
@@ -114,4 +122,18 @@ class AdminInline(InlineKeyboard):
                                               callback_data=Available(go=i,
                                                                       message_id=message_id,
                                                                       data=data).pack()) for i, item in enumerate(text)]
+        return self.builder_row(buttons=buttons, width=self.width)
+
+    def lst_study(self, profile=None, group=None):
+        def shorter(name):
+            user: str = name.split(sep=' ')
+            return ' '.join([user[0], user[1][0], user[2][0]])
+        if profile:
+            data = [item for item in UserVar().all_users() if item['profile'] == profile and item['group'] == group]
+        else:
+            data = UserVar().all_users()
+        study_dict = {value['user_id']: f"{shorter(value['name'])}_+{value['prize']}%_-{value['fine']}" for value in data}
+        buttons: list = [InlineKeyboardButton(text=value,
+                                              callback_data=ScoreGroup(user_id=key,
+                                                                       operation='fine').pack()) for key, value in study_dict.items()]
         return self.builder_row(buttons=buttons, width=self.width)

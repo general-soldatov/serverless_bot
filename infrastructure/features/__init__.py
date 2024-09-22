@@ -1,1 +1,1 @@
-from .admin import AdminFeatures, Mailer, QuestionReply
+from .admin import AdminFeatures, Mailer, QuestionReply, PrizeStudents

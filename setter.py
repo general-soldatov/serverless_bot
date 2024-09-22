@@ -42,4 +42,6 @@ def writer_toml(text):
 # weekday, shedules = Schedule()(day='today')
 # print(weekday, shedules)
 
-UserVar().set_prize(user_id=980314213, prize=25)
+# UserVar().set_fine(user_id=943385782, fine=0)
+# 154666  23455
+UserVar().put_item(user_id=23455, name='Yurk Dll Siii', profile='НТТС', group='8-а', var=12, var_d1=1)

@@ -6,8 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramAPIError
 
 from infrastructure.database import UserUn, UserVar
-from infrastructure.configure.lexicon import ADMIN, BUTTONS_RU
-from infrastructure.keyboard.inline_but import Available, AdminInline
+from infrastructure.configure.lexicon import ADMIN, BUTTONS_RU, USER
+from infrastructure.keyboard.inline_but import Available, AdminInline, PrizeGroup
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,11 @@ class Mailer(StatesGroup):
 class QuestionReply(StatesGroup):
     reply = State()
     available = State()
+
+class PrizeStudents(StatesGroup):
+    profile = State()
+    group = State()
+    score = State()
 
 class AdminFeatures:
     def __init__(self, bot: Bot):
@@ -89,3 +94,32 @@ class AdminFeatures:
         except Exception as e:
             logger.error(e)
             await callback.message.edit_text(text=ADMIN['question_error'].format(error=e))
+
+    async def select_score(self, callback: types.CallbackQuery,
+                                  callback_data: PrizeGroup, state: FSMContext):
+        if callback_data.profile == BUTTONS_RU['all']:
+            buttons = AdminInline(width=2).lst_study()
+            await callback.message.edit_text(text=ADMIN['stat_info'], reply_markup=buttons)
+
+        elif callback_data.group == '0':
+            buttons = AdminInline(width=4).mailer_group(profile=callback_data.profile, Group=PrizeGroup)
+            await callback.message.edit_text(text=ADMIN['score_group'], reply_markup=buttons)
+            # await state.set_state(PrizeStudents.profile.state)
+        else:
+            buttons = AdminInline(width=2).lst_study(callback_data.profile, callback_data.group)
+            await callback.message.edit_text(text=ADMIN['stat_info'], reply_markup=buttons)
+            # await state.set_data(data={'profile': callback_data.profile, 'group': callback_data.group})
+            # await state.set_state(PrizeStudents.group.state)
+
+    async def set_score(self, message: types.Message, state: FSMContext):
+        data = await state.get_data()
+        if message.text[0] == '+':
+            UserVar().set_prize(user_id=data['user_id'], prize=int(message.text[1:]))
+        elif message.text[0] == '-':
+            UserVar().set_fine(user_id=data['user_id'], fine=int(message.text[1:]))
+        else:
+            await message.delete()
+            await message.answer(USER['uncorrect'])
+            return
+        await message.answer(ADMIN['success_score'])
+        await state.clear()
