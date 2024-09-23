@@ -1,5 +1,7 @@
 import json
-from infrastructure.database import UserSheet, UserVar
+import time
+from progress.bar import IncrementalBar
+from infrastructure.database import UserSheet, UserVar, UserUn, YDBStorage
 from infrastructure.database.user_api import UserApi
 import requests
 import toml
@@ -27,21 +29,42 @@ task_head = {
             'D1': 'P', 'D2': 'Q', 'D3': 'R', 'D4': 'S', 'D5': 'T', 'D6': 'U'
             }
 
-# lst_task: list = list(task_head.keys())
-# data: dict = UserVar().get_user(user_id=980314213)
-# for item in data['tasks'].keys():
-#     lst_task.remove(item)
-# print(data['name'], lst_task)
-# print(UserVar().delete_note(122))
+
 def writer_toml(text):
     with open('infrastructure/configure/lexicon.toml', 'a', encoding='utf-8') as file:
         text = toml.dumps(text)
         file.write(text)
         print('Succesful')
 
-# weekday, shedules = Schedule()(day='today')
-# print(weekday, shedules)
+def dump_write():
+    """Функция переноса user_id из дампа в базу данных
+    """
+    data = []
+    with open('base.txt', 'r', encoding='utf-8') as file:
+        for item in file:
+            user = item.strip().split()[1]
 
-# UserVar().set_fine(user_id=943385782, fine=0)
-# 154666  23455
-UserVar().put_item(user_id=23455, name='Yurk Dll Siii', profile='НТТС', group='8-а', var=12, var_d1=1)
+            if user not in data:
+                data.append(user)
+        data.pop(0)
+        bar = IncrementalBar('DB Record', max=len(data))
+        for i, item in enumerate(data):
+            UserUn().put_item(user_id=int(item), name=f'New user_{i}')
+            bar.next()
+            time.sleep(0.5)
+
+        print(' Success')
+
+
+def create_tables():
+    """Функция для создания таблиц в БД
+    """
+    UserUn().create_table()
+    time.sleep(1)
+    YDBStorage()._create_table()
+    time.sleep(1)
+    UserVar().create_table()
+
+
+# create_tables()
+# dump_write()

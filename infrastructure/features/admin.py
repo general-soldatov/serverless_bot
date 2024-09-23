@@ -1,4 +1,5 @@
 import logging
+import time
 
 from aiogram import Bot, types
 from aiogram.fsm.context import FSMContext
@@ -63,7 +64,7 @@ class AdminFeatures:
                 except Exception as e:
                     logger.error(e)
                     errors[item] = e
-
+                time.sleep(0.5)
         else:
             user = UserVar().for_mailer(profile=data['profile'], group=data['group'])
             if user:

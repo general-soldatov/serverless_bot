@@ -72,12 +72,10 @@ def router(dp: Dispatcher, bot: Bot):
         await state.set_state(QuestionReply.available.state)
         await message.answer(text=ADMIN['available_reply'], reply_markup=button)
 
-    @dp.message(F.text == BUTTONS_RU['stat_info'], StateFilter(default_state), F.from_user.id == int(bot_config.admin_ids))
-    async def mailer(message: types.Message, state: FSMContext):
-        # buttons = AdminInline(width=2).lst_study()
+    @dp.message(F.text == BUTTONS_RU['stat_info'], F.from_user.id == int(bot_config.admin_ids))
+    async def mailer(message: types.Message):
         buttons = AdminInline().mailer_profile(PrizeGroup)
         await message.answer(text=ADMIN['score'], reply_markup=buttons)
-        # await state.set_state(PrizeStudents.profile.state)
 
     @dp.callback_query(PrizeGroup.filter(), F.from_user.id == int(bot_config.admin_ids))
     async def callback_score(callback: types.CallbackQuery,
