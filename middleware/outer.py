@@ -7,7 +7,6 @@ from infrastructure.configure.config import bot_config, MenuConfig
 from infrastructure.database import UserUn
 from infrastructure.configure.lexicon import BUTTONS_RU
 
-from pprint import pprint
 
 logger = logging.getLogger(__name__)
 logger.setLevel('INFO')

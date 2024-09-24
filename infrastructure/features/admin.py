@@ -100,7 +100,7 @@ class AdminFeatures:
                                   callback_data: PrizeGroup, state: FSMContext):
         if callback_data.profile == BUTTONS_RU['all']:
             buttons = AdminInline(width=2).lst_study()
-            await callback.message.edit_text(text=ADMIN['stat_info'], reply_markup=buttons)
+            await callback.message.edit_text(text=ADMIN['stat_info'].format(profile='all', group='all'), reply_markup=buttons)
 
         elif callback_data.group == '0':
             buttons = AdminInline(width=4).mailer_group(profile=callback_data.profile, Group=PrizeGroup)
@@ -108,7 +108,8 @@ class AdminFeatures:
 
         else:
             buttons = AdminInline(width=2).lst_study(callback_data.profile, callback_data.group)
-            await callback.message.edit_text(text=ADMIN['stat_info'], reply_markup=buttons)
+            await callback.message.edit_text(text=ADMIN['stat_info'].format(profile=callback_data.profile,
+                                                                            group=callback_data.group), reply_markup=buttons)
 
     async def set_score(self, message: types.Message, state: FSMContext):
         data = await state.get_data()
