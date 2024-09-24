@@ -68,3 +68,5 @@ def create_tables():
 
 # create_tables()
 # dump_write()
+
+print(UserVar().all_users())

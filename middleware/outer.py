@@ -62,9 +62,17 @@ class FirstOuterMiddleware(BaseMiddleware):
                        data: Dict[str, Any]) -> Any:
         user: User = data.get('event_from_user')
 
-        if user is None:
-            return
+        try:
+            if user is None:
+                return
 
-        if self.condition(event, user):
-            result = await handler(event, data)
-            return result
+            if self.condition(event, user):
+                result = await handler(event, data)
+                return result
+        except IndexError:
+            user_id = user.id
+            name = f'{user.first_name} {user.last_name}'
+            UserUn().put_item(user_id, name)
+            logger.error(f'Add user {user_id} {user.first_name} {user.last_name}')
+        except Exception as e:
+            logger.error(f'Middleware {user.id} {e}')
