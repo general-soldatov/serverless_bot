@@ -69,4 +69,8 @@ def create_tables():
 # create_tables()
 # dump_write()
 
-print(UserVar().all_users())
+def func():
+    result = UserApi().get_task()
+    print(result)
+
+# print(UserVar().all_users())

@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import update
 from __app__ import register_handlers
 from infrastructure.database import YDBStorage
+from dynamodb_fsm import FSMDynamodb
 
 
 # Logger initialization and logging level setting
@@ -30,7 +31,8 @@ async def handler(event, context):
     if event['httpMethod'] == 'POST':
         # Bot and dispatcher initialization
         bot = Bot(os.environ.get('TOKEN'))
-        dp = Dispatcher(storage=YDBStorage())
+        storage = FSMDynamodb()
+        dp = Dispatcher(storage=storage)
 
         await register_handlers(dp, bot)
         await process_event(event, dp, bot)
